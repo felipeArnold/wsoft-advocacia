@@ -2,5 +2,6 @@
     <x-app-logo-icon class="size-5 fill-current text-white dark:text-black" />
 </div>
 <div class="ms-1 grid flex-1 text-start text-sm">
-    <span class="mb-0.5 truncate leading-tight font-semibold">Laravel Starter Kit</span>
+    <span class="mb-0.5 truncate leading-tight font-semibold">WSOFT</span>
+    <span class="truncate text-xs text-gray-500">Sistema para Advocacia</span>
 </div>
