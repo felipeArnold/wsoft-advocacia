@@ -30,6 +30,14 @@
                         {{ __('Processes') }}
                     </flux:navlist.item>
                     <flux:navlist.item
+                        icon="user-group"
+                        :href="route('clients.index')"
+                        :current="request()->routeIs('clients.index')"
+                        wire:navigate
+                    >
+                        Clientes
+                    </flux:navlist.item>
+                    <flux:navlist.item
                         icon="home"
                         :href="route('dashboard')"
                         :current="request()->routeIs('dashboard')"

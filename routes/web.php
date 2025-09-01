@@ -17,6 +17,11 @@ Route::middleware(['auth'])->group(function () {
 
     Volt::route('processos', 'process.process-component')->name('process.index');
 
+    /**
+     * Clients
+     */
+    Volt::route('clients', 'clients.client-component')->name('clients.index');
+
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

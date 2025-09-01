@@ -5,10 +5,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Flux\Flux;
 
 new class extends Component {
+
+    use \Livewire\WithFileUploads;
+
     public string $name = '';
     public string $email = '';
+    public string $avatar = '';
 
     /**
      * Mount the component.
@@ -17,6 +22,7 @@ new class extends Component {
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->avatar = Auth::user()->avatarUrl() ?? '';
     }
 
     /**
@@ -47,7 +53,11 @@ new class extends Component {
 
         $user->save();
 
-        $this->dispatch('profile-updated', name: $user->name);
+        Flux::toast(
+            variant: 'success',
+            heading: 'Success',
+            text: 'Profile updated successfully.',
+        );
     }
 
     /**
@@ -72,12 +82,21 @@ new class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
+    <x-settings.layout :heading="'Perfil de acesso'" :subheading="'Gerencie seu perfil e as configurações da conta'">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+
+            <flux:profile
+                name="{{ $this->name }}"
+                :initials="auth()->user()->initials()"
+                avatar="{{ Auth::user()->avatarUrl() ?? null }}"
+            />
+
+            <flux:input wire:model="avatar" :label="'Avatar'" type="file" accept="image/*" />
+
+            <flux:input wire:model="name" :label="'Nome'" type="text" required autofocus autocomplete="name" />
 
             <div>
-                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+                <flux:input wire:model="email" :label="'E-mail'" type="email" required autocomplete="email" />
 
                 @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail &&! auth()->user()->hasVerifiedEmail())
                     <div>
@@ -99,13 +118,10 @@ new class extends Component {
             </div>
 
             <div class="flex items-center gap-4">
-                <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full">{{ __('Save') }}</flux:button>
+                <div class="flex items-center justify-end gap-2">
+                    <flux:button variant="primary" type="submit" class="w-full" icon="check">Atualizar</flux:button>
+                    <flux:button>Cancelar</flux:button>
                 </div>
-
-                <x-action-message class="me-3" on="profile-updated">
-                    {{ __('Saved.') }}
-                </x-action-message>
             </div>
         </form>
 
